@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Workers</title>
+    <script src="./main.js"></script>
+    <script src="./heavy-processing.js"></script>
+    <style>
+      div.animation {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: relative;
+        animation-name: animate;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes animate {
+        0%,
+        100% {
+          background-color: red;
+          left: 0px;
+        }
+        25%,
+        75% {
+          background-color: green;
+          left: 200px;
+        }
+        50% {
+          background-color: blue;
+          left: 400px;
+        }
+      }
+      .btn {
+        padding: 5px;
+        margin: 5px;
+      }
+    </style>
+    <script>
+      const process = bootStraper();
+      function startWorkers() {
+        process.startWorkers();
+      }
+      function doHeavyProcessing() {
+        process.doHeavyProcessing();
+      }
+      function heavyProcessingLocal() {
+        const processingMessageTarget =
+          document.getElementById("processing-result");
+        processingMessageTarget.innerHTML += `<div>Processing started: ${new Date()}</div>`;
+        tenBillonCounter();
+        processingMessageTarget.innerHTML += `<div>Processing finished: ${new Date()}</div>`;
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="animation"></div>
+      <input
+        class="btn"
+        type="button"
+        onclick="doHeavyProcessing()"
+        value="Start Processing using Worker"
+      />
+      <input
+        class="btn"
+        type="button"
+        onclick="heavyProcessingLocal()"
+        value="Start Processing without using Worker"
+      />
+      <div id="date-time"></div>
+      <div id="processing-result"></div>
+    </div>
+  </body>
+  <script>
+    startWorkers();
+  </script>
+</html>
